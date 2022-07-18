@@ -164,6 +164,6 @@ if __name__ == '__main__':
     # Loop through each image and save the patches
     for s in [0.25,0.5,0.75]:
         for i, n in enumerate(test):
-            generate_patches(img_list[n], gt_list[n], './data/train2', res=256, 
+            generate_patches(img_list[n], gt_list[n], './data/train', res=256, 
                             overlap=64, scale=s, lim=0.01)
             print(f"{i+1}/{len(img_list)}")
