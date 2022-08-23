@@ -8,7 +8,7 @@ from skimage.transform import rescale, resize
 from skimage.io import imread, imsave
 from sklearn.model_selection import train_test_split
 
-def generate_patches(img_path, gt_path, save_path, res=256, overlap=64, scale=1, lim=0.01):
+def generate_patches(img_path, gt_path, save_path, res=256, overlap=64, scale=1, save=True):
     '''Split images into overlapping patches having a proportion 
     of positive class larger than a defined threshold.
     
@@ -25,9 +25,7 @@ def generate_patches(img_path, gt_path, save_path, res=256, overlap=64, scale=1,
             Overlap of the generated patches (default: 64)
         scale::float
             Scale to scale down image resolution (default: 1)
-        lim::float
-            Threshold for the proportion of positive class (default: 0.01)
-            
+                  
     Returns:
         None
     '''
@@ -42,11 +40,12 @@ def generate_patches(img_path, gt_path, save_path, res=256, overlap=64, scale=1,
     img = imread(img_path)
     gt = imread(gt_path, as_gray=True)
     
-    # Check if paths exist
-    if not os.path.exists(save_path+'/img'):
-        os.makedirs(save_path+'/img')
-    if not os.path.exists(save_path+'/gt'):
-        os.makedirs(save_path+'/gt')
+    if save:
+        # Check if paths exist
+        if not os.path.exists(save_path+'/img'):
+            os.makedirs(save_path+'/img')
+        if not os.path.exists(save_path+'/gt'):
+            os.makedirs(save_path+'/gt')
     
     # Check if image and ground truth are the same size
     if img.shape[0] != gt.shape[0] or img.shape[1] != gt.shape[1]: 
@@ -64,27 +63,28 @@ def generate_patches(img_path, gt_path, save_path, res=256, overlap=64, scale=1,
     w_ind= np.arange(0, w-res+1, res-overlap)
     
     # Resize image and ground truth to appropriate resolution
-    if h-h_ind[-1] > res: hr=h_ind[-1]+res
-    if w-w_ind[-1] > res: wr=w_ind[-1]+res
-    
-    # Resize image and ground truth
-    if h!=hr or w!=wr:
-        img_scaled = resize(img_scaled, (hr, wr, c), anti_aliasing=True)
-        gt_scaled = resize(gt_scaled, (hr, wr, 1))
+    h1 = h_ind[-1]+res
+    w1 = w_ind[-1]+res
+
+    if h != h1 or w != w1:
+        img_scaled = resize(img_scaled, (h1, w1, c), anti_aliasing=True)
+        gt_scaled = resize(gt_scaled, (h1, w1, 1))
     
     # Loop through each window and save the image
     for s, (r,c) in enumerate(product(h_ind,w_ind)):
-        if (np.sum(gt_scaled[r:r+res, c:c+res, :]==1)/(res**2)) > lim:
+        if (np.sum(gt_scaled[r:r+res, c:c+res, :]==1)/(res**2)) != 0:
 
             # Crop patch out of image and ground truth
             img_crop = np.clip(img_scaled[r:r+res, c:c+res, :], -1, 1)
             gt_crop = np.clip(gt_scaled[r:r+res, c:c+res, :], -1, 1) >= 0.5
             
-            imsave(f'{save_path}/img/{name}_patch{s}_scale{int(scale*100)}.jpg', 
-                   img_as_ubyte(img_crop), check_contrast=False)
-            imsave(f'{save_path}/gt/{name}_patch{s}_scale{int(scale*100)}.jpg', 
-                   img_as_ubyte(gt_crop), check_contrast=False)
- 
+            if save:
+                imsave(f'{save_path}/img/{name}_p{s}_scale{int(scale*100)}.jpg', 
+                    img_as_ubyte(img_crop), check_contrast=False)
+                imsave(f'{save_path}/gt/{name}_p{s}_scale{int(scale*100)}.jpg', 
+                    img_as_ubyte(gt_crop), check_contrast=False)
+    
+    return img_scaled, gt_scaled, (h_ind, w_ind)
  
 def get_file_list(path, file_format=".jpg"):
     '''Iterate through a folder and return a list of image paths 
@@ -151,6 +151,11 @@ if __name__ == '__main__':
 
     img_list = get_file_list(img_folder_path, "")
     gt_list = get_file_list(gt_folder_path, ".jpg")
+    
+    # Check if folders are empty
+    if len(img_list)==0 or len(gt_list)==0:
+        print('ERROR: Folder is empty.')
+        sys.exit()
 
     # Check if number of files is the same
     if len(img_list) != len(gt_list):
@@ -162,8 +167,8 @@ if __name__ == '__main__':
     train, val, test = get_train_test_split(ind, [0.6, 0.2, 0.2])
     
     # Loop through each image and save the patches
-    for s in [0.25,0.5,0.75]:
-        for i, n in enumerate(test):
-            generate_patches(img_list[n], gt_list[n], './data/train', res=256, 
-                            overlap=64, scale=s, lim=0.01)
-            print(f"{i+1}/{len(img_list)}")
+    for s in [0.125,0.25,0.5]:
+        for i, n in enumerate(val):
+            generate_patches(img_list[n], gt_list[n], './data/val', 
+                             res=224, overlap=56, scale=s, save=False)
+            print(f"{i+1}/{len(val)}")
