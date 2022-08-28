@@ -69,6 +69,8 @@ def generate_patches(img_path, gt_path, save_path, res=256, overlap=64, scale=1,
     if h != h1 or w != w1:
         img_scaled = resize(img_scaled, (h1, w1, c), anti_aliasing=True)
         gt_scaled = resize(gt_scaled, (h1, w1, 1))
+        
+    gt_scaled = gt_scaled>=0.5
     
     # Loop through each window and save the image
     for s, (r,c) in enumerate(product(h_ind,w_ind)):
@@ -76,7 +78,7 @@ def generate_patches(img_path, gt_path, save_path, res=256, overlap=64, scale=1,
 
             # Crop patch out of image and ground truth
             img_crop = np.clip(img_scaled[r:r+res, c:c+res, :], -1, 1)
-            gt_crop = np.clip(gt_scaled[r:r+res, c:c+res, :], -1, 1) >= 0.5
+            gt_crop = np.clip(gt_scaled[r:r+res, c:c+res, :], -1, 1)
             
             if save:
                 imsave(f'{save_path}/img/{name}_p{s}_scale{int(scale*100)}.jpg', 
