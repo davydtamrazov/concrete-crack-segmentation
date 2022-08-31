@@ -10,8 +10,9 @@ Original dataset is 458 high-resolution (4032x3024) concrete crack images obtain
 
 ![Pre-processing of the original dataset downscaled by a factor of 0.5](./aux/data_preprocessing_example.png)
 
-To augment the dataset image resolution is downscaled by multiple factors (0.125, 0.25, 0.5), thereby allowing to create images of cracks of various sizes. Additionally, patches are generated with an overlap of 112 pixels, helping to almost double dataset size. As a result generated dataset contains 
+To augment the dataset image resolution is downscaled by multiple factors (0.125, 0.25, 0.5), thereby allowing to generate images of cracks of various sizes.
 
+Original dataset is divided into training, validation and test sets at 0.6:0.2:0.2 splits. Each set is the pre-processed with the described above routine resulting in 5100, 1740 and 1778 respectively.
 
 # References
 
