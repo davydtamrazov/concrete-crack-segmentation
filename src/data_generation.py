@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 import os
 import glob
 import sys
@@ -78,7 +79,7 @@ def generate_patches(img_path, gt_path, save_path, res=256, overlap=64, scale=1,
 
             # Crop patch out of image and ground truth
             img_crop = np.clip(img_scaled[r:r+res, c:c+res, :], -1, 1)
-            gt_crop = np.clip(gt_scaled[r:r+res, c:c+res, :], -1, 1)
+            gt_crop = np.clip(gt_scaled[r:r+res, c:c+res, :], -1, 1) != 0
             
             if save:
                 imsave(f'{save_path}/img/{name}_p{s}_scale{int(scale*100)}.jpg', 
@@ -166,11 +167,14 @@ if __name__ == '__main__':
     
     # Split data into training, validation and test sets
     ind = np.arange(len(img_list))
-    train, val, test = get_train_test_split(ind, [0.6, 0.2, 0.2])
+    data = get_train_test_split(ind, [0.6, 0.2, 0.2])
     
     # Loop through each image and save the patches
-    for s in [0.125,0.25,0.5]:
-        for i, n in enumerate(val):
-            generate_patches(img_list[n], gt_list[n], './data/val', 
-                             res=224, overlap=56, scale=s, save=False)
-            print(f"{i+1}/{len(val)}")
+    names = ["train", "val", "test"]
+    
+    for ind in [0,1,2]:
+        for s in [1/6, 1/4, 1/3]:
+            for i, n in enumerate(data[ind]):
+                generate_patches(img_list[n], gt_list[n], f'./data/{names[ind]}', 
+                                res=224, overlap=0, scale=s, save=True)
+                print(f"{i+1}/{len(data[ind])}")
