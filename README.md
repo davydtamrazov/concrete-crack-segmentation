@@ -7,14 +7,19 @@ Original dataset is 458 high-resolution (4032x3024) concrete crack images obtain
 1. Image is scaled down and split up into a 224x224 grid.
 2. Segmentation mask is used to select patches on the grid that contain target class (i.e. crack is present)
 
-
 ![Pre-processing of the original dataset downscaled by a factor of 0.5](./aux/data_preprocessing_example.png)
+> Figure 1: Left to right, grid generation over original image; selection of patches with target class; generated data.
 
 To augment the dataset image resolution is downscaled by multiple factors (0.125, 0.25, 0.5), thereby allowing to generate images of cracks of various sizes.
 
 Original dataset is divided into training, validation and test sets at 0.6:0.2:0.2 splits. Each set is the pre-processed with the described above routine resulting in 5100, 1740 and 1778 respectively.
 
-# References
+## Approach
+
+### Baseline Model
+As a baseline for crack segmentation a threshold model is created.
+
+## References
 
 Özgenel, Çağlar Fırat (2019), 
 “Concrete Crack Segmentation Dataset”, 
