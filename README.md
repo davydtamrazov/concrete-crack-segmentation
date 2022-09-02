@@ -10,14 +10,18 @@ Original dataset is 458 high-resolution (4032x3024) concrete crack images obtain
 ![Pre-processing of the original dataset downscaled by a factor of 0.5](./aux/data_preprocessing_example.png)
 > Figure 1: Left to right, grid over original image; selection of patches with target class; generated data.
 
-To augment the dataset at pre-processing stage, image resolution is downscaled by multiple factors (1/6, 1/4, 1/3), thereby allowing to generate images of cracks of various scales. 
+To augment the dataset at pre-processing stage, image resolution is downscaled by multiple factors (1/6, 1/4, 1/3), thereby allowing to generate images of cracks of various scales. Additionally, patches are generated with a 112px overlap, thereby allowing fully capture all of the cracks in each image and increase dataset size by 4x.
 
-Original dataset is divided into training, validation and test sets at 0.6:0.2:0.2 split. Each set is the pre-processed with the described above routine resulting in 5100, 1740 and 1778 images in each set correspondingly.
+Original dataset is divided into train, validation and test sets at 0.6:0.2:0.2 split and pre-processed with the above routine. This results in 18132, 6244 and 6260 images in each set correspondingly.
 
 ## Approach
 
+### Metric
+
+
 ### Baseline Model
 As a baseline for crack segmentation a threshold model is created.
+
 
 ### U-Net Architecture
 
