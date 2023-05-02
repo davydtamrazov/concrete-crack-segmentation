@@ -17,13 +17,17 @@ Original dataset is divided into train, validation and test sets at 0.6:0.2:0.2 
 ## Approach
 
 ### Metric
-For segmentation of cracks in concrete it makes sense to prioritize recall over precision. Thus, a typical F1-metric can be revised to Fbeta-metric where beta factor defines the degree of importance of recall and precision in the metric:
+For segmentation of cracks in concrete it makes sense to prioritize recall over precision. Thus, a typical F1 score can be revised to Fbeta score where beta factor defines the degree of importance of recall and precision in the metric. For this problem F2 score is selected as the most appropriate.
+
+$$
+F_{\beta} = (1 + \beta^2) \cdot \frac{\mathrm{precision} \cdot \mathrm{recall}}{(\beta^2 \cdot \mathrm{precision}) + \mathrm{recall}}
+$$
 
 
 ### Baseline Model
 As a baseline for crack segmentation a threshold model is set up. Each RGB photo of concrete is converted to black & white and is further normalized to a [0,1] scale. This allows to then use a threshold for a binary classifier that can be optimized to maximize the chosen metric on the validation set. This process is shown below as well as a comparison of what maximizing different Fbeta metrics means visually.
 
-(./aux/threshold_method.png)
+![Comparisonn of various Fbeta metrics for the threshold method](./aux/threshold_method.png)
 
 ### U-Net Architecture
 
