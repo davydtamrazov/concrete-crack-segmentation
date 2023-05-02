@@ -3,7 +3,7 @@ Semantic segmentation of cracks in concrete using U-Net based Fully Convolutiona
 
 
 ## Dataset
-Original dataset is 458 high-resolution (4032x3024) concrete crack images obtained from https://data.mendeley.com/datasets/jwsn7tfbrp/1. Dataset used for this project was generated as follows:
+Original dataset is 458 high-resolution (4032x3024) concrete crack images obtained from [here](https://data.mendeley.com/datasets/jwsn7tfbrp/1). Dataset used for this project was generated as follows:
 1. Image is scaled down and split up into a 224x224 grid.
 2. Segmentation mask is used to select patches on the grid that contain target class (i.e. crack is present)
 
