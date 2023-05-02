@@ -17,10 +17,10 @@ Original dataset is divided into train, validation and test sets at 0.6:0.2:0.2 
 ## Approach
 
 ### Metric
-For segmentation of cracks in concrete it makes sense to prioritize recall over precision. Thus, a typical F1 score can be revised to Fbeta score where beta factor defines the degree of importance of recall and precision in the metric. For this problem F2 score is selected as the most appropriate.
+For segmentation of cracks in concrete it makes sense to prioritize recall over precision. Thus, a typical F1 score can be revised to Fbeta score where beta factor defines the degree of importance of recall and precision in the metric. For this problem F2 score is selected as the most appropriate:
 
 $$
-F_{\beta} = (1 + \beta^2) \cdot \frac{\mathrm{precision} \cdot \mathrm{recall}}{(\beta^2 \cdot \mathrm{precision}) + \mathrm{recall}}
+F_{\beta} = (1 + \beta^2) \cdot \frac{\mathrm{precision} \cdot \mathrm{recall}}{(\beta^2 \cdot \mathrm{precision}) + \mathrm{recall}}, \quad \mathrm{where} \\ \beta=2
 $$
 
 
