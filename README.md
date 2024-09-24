@@ -27,10 +27,10 @@ $$
 ### Baseline Model
 As a baseline for crack segmentation a threshold model is set up. Each RGB photo of concrete is converted to black & white and is further normalized to a [0,1] scale. This allows to then use a threshold for a binary classifier that can be optimized to maximize the chosen metric on the validation set. This process is shown below as well as a comparison of what maximizing different Fbeta metrics means visually.
 
-![Comparisonn of various Fbeta metrics for the threshold method](./aux/threshold_method.png)
+![Comparison of various Fbeta metrics for the threshold method](./aux/threshold_method.png)
 
 ### U-Net Architecture
-
+![Encoder-Decoder Architecture](./aux/encoder_decoder_architecture.png)
 
 ### Loss Functions
 
